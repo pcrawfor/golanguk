@@ -1,0 +1,17 @@
+func someHandler() {
+	ctx, cancel := context.WithCancel(context.Background())
+	go doStuff(ctx)
+	// ...some work happens...
+	cancel()
+}
+
+func doStuff(ctx context.Context) {
+	// ...Doing some work
+	for {
+		select {
+		case <-ctx.Done():
+			fmt.Println("Stop work!")
+			return
+		}
+	}
+}
