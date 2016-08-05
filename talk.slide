@@ -18,7 +18,7 @@ Tags: go golang context
 
 .image ./logo_horizontal.svg
 
-: ----
+: -------------------------------------------------------------------------------
 
 * Let's Talk
 
@@ -33,14 +33,12 @@ Tags: go golang context
 
 : I'll try to keep this at a beginner/intermediate level and not get into to any complex weeds
 
-:
-
 
 .image ./funny_picture_goes_here
 
 : I once saw Joel Spolsky give a keynote at RailsConf, and one of the things he said and how he opened his talk was with a picture of some really attractive people. He said that the it was always a good idea to start a talk off with an appealing image or a funny image so that you create a good positive impression of yourself
 
-: ----
+: -------------------------------------------------------------------------------
 
 * The Problem(s)
 
@@ -59,7 +57,7 @@ Tags: go golang context
 : If you've written much go code you have probably already tried several ways of doing this.
 : The context package seeks to provide a nice standardized way to solve for these two problems - how to share data and how to manage the lifecycle of your goroutines.
 
-: ----
+: -------------------------------------------------------------------------------
 
 * The Solution
 
@@ -69,7 +67,7 @@ Tags: go golang context
 - Deadlines and timeouts
 - Safe for concurrent use
 
-: ----
+: -------------------------------------------------------------------------------
 
 * Some Context for Context
 
@@ -79,7 +77,7 @@ Tags: go golang context
 
 .image ./example_flow_with_context_graphic
 
-: ----
+: -------------------------------------------------------------------------------
 
 * Context and Go 1.7
 
@@ -90,12 +88,15 @@ Tags: go golang context
 
 : Context has now proven itself valuable enough that it's being added to the core library and some useful helpers are being added to other core libraries to make it even easier to work with.
 
+: -------------------------------------------------------------------------------
+
 * The Context Type
 
 - Context is made up of the Context Type along with some supporting functions
 
 .code context.txt
 
+: -------------------------------------------------------------------------------
 
 * Done()
 
@@ -104,11 +105,15 @@ Tags: go golang context
 
 .code done1.txt
 
+: -------------------------------------------------------------------------------
+
 * Err(), Deadline()
 
 - The Err() function returns an error indicating why the Context was cancelled
 - The Deadline() function allows a sub-operation to determine if it should start work
 - Deadline() returns both a time value indicating when work should be cancelled along with a boolean indicating if a deadline has been set on the context
+
+: -------------------------------------------------------------------------------
 
 * Value()
 
@@ -119,6 +124,18 @@ A few notes from recent context conversations online:
 - Context value handling is completely type unsafe and can't be checked at compile time
 - Essentially a `map[interface{}]interface{}`
 - Good examples of data to store in context include data extracted from headers or cookies, userID's tied to auth information, etc
+
+: -------------------------------------------------------------------------------
+
+* Derived Contexts
+
+- The context package provides functions that derive new Context values from existing ones
+- These Contexts form a tree and when any Context is cancelled all those dervied from it are also cancelled
+- Provides a mechanism to manage the lifecycle of dependent functions within a request scoped operation
+
+.image ./example_context_derivation_lifecycle_image
+
+: -------------------------------------------------------------------------------
 
 * Instantiating Contexts
 
@@ -142,6 +159,8 @@ TODO()
 
 * Instantiating Contexts (cont'd)
 
+: -------------------------------------------------------------------------------
+
 WithCancel():
 
 .code with_cancel.txt
@@ -151,6 +170,8 @@ WithCancel():
 : WithCancel returns a copy of parent with a new Done channel. The returned context's Done channel is closed when the returned cancel function is called or when the parent context's Done channel is closed, whichever happens first.
 
 : Canceling this context releases resources associated with it, so code should call cancel as soon as the operations running in this Context complete
+
+: -------------------------------------------------------------------------------
 
 WithDeadline()
 
@@ -166,11 +187,16 @@ WithDeadline()
 
 : Canceling this context releases resources associated with it, so code should call cancel as soon as the operations running in this Context complete
 
+: -------------------------------------------------------------------------------
+
 * Instantiating Contexts (cont'd)
 
 WithTimeout()
 
 .code with_timeout.txt
+
+- Returns a context with the deadline set to the current time plus the value of the timeout
+- Code should call cancel as soon as operations running this Context complete
 
 : WithTimeout returns WithDeadline(parent, time.Now().Add(timeout)).
 
@@ -180,15 +206,23 @@ WithValue()
 
 .code with_value.txt
 
-* Derived Contexts
+- Returns a copy of the parent in which the value for the specified key is set to val
+
+: WithValue returns a copy of parent in which the value associated with key is val.
+
+: Use context Values only for request-scoped data that transits processes and APIs, not for passing optional parameters to functions
+
+: -------------------------------------------------------------------------------
+
 
 * Next
 
 .play hello.go
 
-: ----
+: -------------------------------------------------------------------------------
 
 * Thanks
+
 Paul Crawford
 CTO @ Daily Burn
 paul@dailyburn.com

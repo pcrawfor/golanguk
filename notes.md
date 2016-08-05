@@ -141,3 +141,11 @@ However request scoped data does make sense to pass around via context, generall
 
 For example data extracted from headers or cookies, userID's tied to auth information, etc.
 
+## Keys
+
+* unexported key types
+* see recent article on this
+* avoiding key collisions is important as more libraries, middleware, etc us context to set request data
+
+# Example
+
