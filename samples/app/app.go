@@ -7,14 +7,14 @@
 package main
 
 import (
-	"context"
 	"flag"
+	"golang.org/x/net/context"
 	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"github.com/pcrawfor/golanguk/samples/http1/user"
+	"github.com/pcrawfor/golanguk/samples/app/user"
 )
 
 var addr = flag.String("addr", "localhost:8080", "http service address")

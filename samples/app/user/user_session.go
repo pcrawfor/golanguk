@@ -1,7 +1,7 @@
 package user
 
 import (
-	"context"
+	"golang.org/x/net/context"
 	"log"
 	"time"
 
@@ -63,7 +63,7 @@ func (u *UserSession) keepAlive(ctx context.Context) {
 func (u *UserSession) runLoop(cancel context.CancelFunc) error {
 	u.conn.SetReadLimit(maxMessageSize)
 	u.conn.SetReadDeadline(time.Now().Add(pongWait))
-	u.conn.SetPongHandler(func(string) error { c.ws.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+	u.conn.SetPongHandler(func(string) error { u.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 
 	for {
 		mt, message, err := u.conn.ReadMessage()
@@ -86,6 +86,6 @@ func (u *UserSession) runLoop(cancel context.CancelFunc) error {
 }
 
 func (u *UserSession) writeToConn(mt int, msg []byte) {
-	u.conn.SetWriteDeadline(writeWait)
+	u.conn.SetWriteDeadline(time.Now().Add(writeWait))
 	u.conn.WriteMessage(mt, msg)
 }
