@@ -33,7 +33,10 @@ window.addEventListener("load", function(evt) {
     };
 
     document.getElementById("clear").onclick = function(evt) {
-
+        var myNode = document.getElementById("output");
+        while (myNode.firstChild) {
+          myNode.removeChild(myNode.firstChild);
+        }
     };
 
     document.getElementById("open").onclick = function(evt) {
