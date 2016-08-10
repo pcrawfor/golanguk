@@ -21,17 +21,13 @@ var upgrader = websocket.Upgrader{} // use default options
 
 var templates *template.Template
 
-func echo(w http.ResponseWriter, r *http.Request) {
+func websock(w http.ResponseWriter, r *http.Request) {
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Print("upgrade:", err)
 		return
 	}
 	defer c.Close()
-
-	// TODO: review the structure
-	// TODO: extract request information and set it as context value(s)
-	// TODO: think of an external service integration that makes sense to demo to show deadline/timeout?
 
 	us := user.NewSession()
 	ctx, cancel := context.WithCancel(context.Background())
@@ -41,7 +37,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 
 func home(w http.ResponseWriter, r *http.Request) {
 	reloadTemplates()
-	templates.ExecuteTemplate(w, "home", "ws://"+r.Host+"/echo")
+	templates.ExecuteTemplate(w, "home", "ws://"+r.Host+"/websock")
 }
 
 func search(w http.ResponseWriter, r *http.Request) {
@@ -52,8 +48,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 func ask(w http.ResponseWriter, r *http.Request) {
 	qry := r.FormValue("input")
 
-	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(3*time.Second))
-	defer cancel()
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Second))
 
 	type resultAndError struct {
 		result string
@@ -67,14 +62,12 @@ func ask(w http.ResponseWriter, r *http.Request) {
 		answerChan <- resultAndError{result, err}
 	}()
 
-	gifCtx, gifCancel := context.WithCancel(ctx)
-
 	// ask giphy for a gif
 	gifChan := make(chan resultAndError)
 	go func() {
 		g := lookup.NewGiphy(user.GiphyKey)
 		terms := strings.Split(qry, " ")
-		url, err := g.GifForTerms(gifCtx, terms)
+		url, err := g.GifForTerms(ctx, terms)
 		gifChan <- resultAndError{url, err}
 	}()
 
@@ -85,11 +78,11 @@ func ask(w http.ResponseWriter, r *http.Request) {
 			select {
 			case r := <-answerChan:
 				result = r.result
-				if r.err != nil {
+				if r.err != nil || len(result) < 1 {
 					result = "Whoops we couldn't find anything!"
 				}
 				log.Println("CANCEL GIF REQUEST")
-				gifCancel()
+				cancel()
 				return
 			case r := <-gifChan:
 				if r.err != nil {
@@ -97,7 +90,7 @@ func ask(w http.ResponseWriter, r *http.Request) {
 				}
 				gif = r.result
 			case <-ctx.Done():
-				result = "Whoops we couldn't find anything!"
+				result = "Whoops we ran out of time!"
 				return
 			}
 		}
@@ -133,8 +126,8 @@ func main() {
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
-	http.HandleFunc("/echo", echo)
-	http.HandleFunc("/", home)
+	http.HandleFunc("/", search)
+	http.HandleFunc("/websock", websock)
 	http.HandleFunc("/search", search)
 	http.HandleFunc("/ask", ask)
 
