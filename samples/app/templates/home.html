@@ -1,109 +1,34 @@
 {{ define "home" }}
-<!DOCTYPE html>
-<head>
-<meta charset="utf-8">
-<script src="/public/js/jquery.js"></script>
+    {{ template "header" . }}
 
-<script>
-window.addEventListener("load", function(evt) {
-    var output = document.getElementById("output");
-    var input = document.getElementById("input");
-    var ws;
-    var print = function(message) {
-        var d = document.createElement("div");
-        d.innerHTML = message;
-        if(output.childNodes.length > 0) {
-          output.insertBefore(d, output.childNodes[0])
-        } else {
-          output.appendChild(d);
-        }
-    };
+        {{ template "nav" }}
+            <div class="row">
+                    <button class="btn btn-primary" id="open">Connect</button>
+                    <button class="btn btn-danger" style="display:none;" id="close">Disconnect</button>
+                    <button class="btn btn-warning" id="clear">Clear</button>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-1">
+                    <img src="/public/img/golang_gopher.svg" style="width:50px; margin-left:40%;">
+                </div>
 
-    var showGif = function(url) {
-        console.log("link");
-        var d = document.createElement("div");
-        var img = document.createElement("img");
-        img.setAttribute("src", url);
-        d.appendChild(img);
-        if(output.childNodes.length > 0) {
-          output.insertBefore(d, output.childNodes[0])
-        } else {
-          output.appendChild(d);
-        }
-    };
+                <div class="col-md-9">
+                    <input id="input" type="text" class="form-control" placeholder="Write stuff here...">
+                </div>
 
-    document.getElementById("clear").onclick = function(evt) {
-        var myNode = document.getElementById("output");
-        while (myNode.firstChild) {
-          myNode.removeChild(myNode.firstChild);
-        }
-    };
+                <div class="col-md-2">
+                    <button id="send">Send</button>
+                </div>
+            </div>
 
-    document.getElementById("open").onclick = function(evt) {
-        if (ws) {
-            return false;
-        }
-        ws = new WebSocket("{{.}}");
-        ws.onopen = function(evt) {
-            print("OPEN");
-        }
-        ws.onclose = function(evt) {
-            print("CLOSE");
-            ws = null;
-        }
-        ws.onmessage = function(evt) {
-            if(evt.data.match("http", evt.data)){
-              showGif(evt.data);
-            } else if(evt.data.match("keepalive", evt.data)){
-              console.log("keepalive");
-            } else {
-              print("RESPONSE: " + evt.data);
-            }
-        }
-        ws.onerror = function(evt) {
-            print("ERROR: " + evt.data);
-        }
-        return false;
-    };
-    document.getElementById("send").onclick = function(evt) {
-        if (!ws) {
-            return false;
-        }
-        print("SEND: " + input.value);
-        ws.send(input.value);
-        return false;
-    };
-    document.getElementById("close").onclick = function(evt) {
-        if (!ws) {
-            return false;
-        }
-        ws.close();
-        return false;
-    };
-});
-</script>
-</head>
-<body>
-  <table>
-    <tr><td valign="top" width="50%">
-    <p>Click "Open" to create a connection to the server,
-    "Send" to send a message to the server and "Close" to close the connection.
-    You can change the message and send multiple times.
-    <p>
-    <form>
-      <button id="open">Open</button>
-      <button id="close">Close</button>
-      <button id="clear">Clear</button>
-      <p><input id="input" type="text" value="Hello world!">
-      <button id="send">Send</button>
-    </form>
-    </td><td valign="top" width="50%">
-    <div id="output">
-    </div>
+            <hr />
 
-    </td>
-    </tr>
-  </table>
-</body>
-</html>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="output">
+                    </div>
+                </div>
+            </div>
+    {{ template "footer" .}}
 {{ end }}

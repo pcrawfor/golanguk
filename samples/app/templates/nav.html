@@ -1,0 +1,34 @@
+{{ define "nav" }}
+  <!-- Static navbar -->
+  <div class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Ask Bot - GolangUK Sample</a>
+        <ul class="nav navbar-nav">
+          <li class=""><a href="/search">Search</a></li>
+          <li class=""><a href="/">Real Time</a></li>
+        </ul>
+      </div>
+      <ul class="nav navbar-inverse navbar-nav navbar-right">
+        {{ if .user }}
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              <span class="glyphicon glyphicon-user"></span> {{ .user }} <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="/logout">Sign Out</a></li>
+            </ul>
+          </li>
+        {{ else }}
+          <li><a href="/login">Sign In</a></li>
+        {{ end }}
+      </ul>
+    </div>
+  </div>
+  <div class="container">
+{{ end }}

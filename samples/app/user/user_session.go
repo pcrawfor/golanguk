@@ -27,6 +27,8 @@ const (
 	maxMessageSize = 1024
 )
 
+const GiphyKey = "dc6zaTOxFJmzC"
+
 type User struct {
 	Email string
 }
@@ -142,7 +144,7 @@ func (u *UserSession) handleQuestion(ctx context.Context, qry string) ([]byte, e
 }
 
 func (u *UserSession) handleGif(ctx context.Context, qry string) ([]byte, error) {
-	g := lookup.NewGiphy("dc6zaTOxFJmzC")
+	g := lookup.NewGiphy(GiphyKey)
 
 	// split the query into terms
 	terms := strings.Split(qry, " ")

@@ -1,0 +1,135 @@
+.drag-handle {
+    cursor: move;
+    cursor: -webkit-grabbing;
+}
+
+.ghost {
+  opacity: 0.4;
+}
+
+.panel-darkpurple {
+  border-color: #C075E6;
+}
+.panel-darkpurple > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #C075E6;
+}
+
+.panel-darkpurple > .panel-heading > .panel-title {
+  color: #3B4447;
+}
+
+.panel-lightpurple {
+  border-color: #DDB3F2;
+}
+.panel-lightpurple > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #DDB3F2;
+}
+
+.panel-darkpink {
+  border-color: #EB62F0;
+}
+.panel-darkpink > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #EB62F0;
+}
+
+.panel-lightpink {
+  border-color: #F3C1F5;
+}
+.panel-lightpink > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #F3C1F5;
+}
+
+.panel-lightgreen {
+  border-color: #F3C1F5;
+}
+.panel-lightgreen > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #94F7BF;
+}
+
+.panel-darkbrown > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #b2692c;
+}
+
+.panel-darkbrown > .panel-heading > .panel-title {
+  color: #3B4447;
+}
+
+.panel-yellow > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #f6bb42;
+}
+
+.panel-yellow > .panel-heading > .panel-title {
+  color: #3B4447;
+}
+
+.panel-red > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #da4453;
+}
+
+.panel-red > .panel-heading > .panel-title {
+  color: #3B4447;
+}
+
+.panel-lightred > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #FF5C6C;
+}
+
+.panel-lightred > .panel-heading > .panel-title {
+  color: #3B4447;
+}
+
+.panel-green > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #37bc9b;
+}
+
+.panel-green > .panel-heading > .panel-title {
+  color: #3B4447;
+}
+
+.panel-blue > .panel-heading {
+  color: #3B4447;
+  background-color: #EFEFEF;
+  border-width: 4px;
+  border-color: #3bafda;
+}
+
+.panel-blue > .panel-heading > .panel-title {
+  color: #3B4447;
+}
+
+.panel-cutline > .panel-heading {
+  color: white;
+  background-color: #555;
+  border-width: 4px;
+  border-color: #ff5b14;
+}

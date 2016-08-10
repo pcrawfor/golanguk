@@ -8,13 +8,20 @@ import (
 	"golang.org/x/net/context"
 )
 
-func DuckduckQuery(ctx context.Context, question string) (string, error) {
+func afterDeadline(ctx context.Context) bool {
 	if deadline, ok := ctx.Deadline(); ok {
 		// if the deadline has passed return
-		fmt.Println("DEADLINE:", deadline)
 		if time.Now().After(deadline) {
-			return "", ctx.Err()
+			return true
 		}
+	}
+
+	return false
+}
+
+func DuckduckQuery(ctx context.Context, question string) (string, error) {
+	if afterDeadline(ctx) {
+		return "", ctx.Err()
 	}
 
 	type responseAndError struct {
@@ -26,6 +33,12 @@ func DuckduckQuery(ctx context.Context, question string) (string, error) {
 
 	go func() {
 		resp, err := goduckgo.Query(question)
+
+		if afterDeadline(ctx) {
+			respChan <- responseAndError{"", ctx.Err()}
+			return
+		}
+
 		fmt.Println("RESP:", resp)
 		result := ""
 
@@ -34,6 +47,7 @@ func DuckduckQuery(ctx context.Context, question string) (string, error) {
 		}
 
 		respChan <- responseAndError{result, err}
+		return
 	}()
 
 	select {
@@ -59,12 +73,10 @@ func extractInfo(resp *goduckgo.Message) string {
 	}
 	if len(resp.Results) > 0 {
 		fmt.Println("Setting result:", resp.Abstract)
-		//index := rand.Intn(len(resp.Results) - 1)
 		return resp.Results[0].Text
 	}
 	if len(resp.RelatedTopics) > 0 {
 		fmt.Println("Setting related topic:", resp.Abstract)
-		//index := rand.Intn(len(resp.RelatedTopics) - 1)
 		return resp.RelatedTopics[0].Text
 	}
 	return ""
