@@ -16,7 +16,6 @@ import (
 	"github.com/pcrawfor/golanguk/samples/app/user"
 )
 
-//var addr = flag.String("addr", "localhost:3000", "http service address")
 var upgrader = websocket.Upgrader{} // use default options
 
 var templates *template.Template
@@ -48,6 +47,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 func ask(w http.ResponseWriter, r *http.Request) {
 	qry := r.FormValue("input")
 
+	// create a context with a hard deadline for returning something
 	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Second))
 
 	type resultAndError struct {
@@ -102,7 +102,6 @@ func ask(w http.ResponseWriter, r *http.Request) {
 		"gif":      gif,
 	}
 
-	log.Println("Result:", result)
 	templates.ExecuteTemplate(w, "results", params)
 }
 
@@ -117,10 +116,7 @@ func main() {
 	log.SetFlags(0)
 	wd, _ := os.Getwd()
 	dir := wd
-	//    dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+
 	templates = template.Must(template.ParseGlob(dir + "/templates/*.html"))
 
 	fs := http.FileServer(http.Dir("public"))
