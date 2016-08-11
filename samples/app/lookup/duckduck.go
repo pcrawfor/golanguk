@@ -10,7 +10,6 @@ import (
 
 func afterDeadline(ctx context.Context) bool {
 	if deadline, ok := ctx.Deadline(); ok {
-		// if the deadline has passed return
 		if time.Now().After(deadline) {
 			return true
 		}
@@ -20,6 +19,7 @@ func afterDeadline(ctx context.Context) bool {
 }
 
 func DuckduckQuery(ctx context.Context, question string) (string, error) {
+	time.Sleep(1 * time.Second)
 	if afterDeadline(ctx) {
 		return "", ctx.Err()
 	}
