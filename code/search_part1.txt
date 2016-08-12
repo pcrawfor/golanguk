@@ -1,6 +1,7 @@
 func search(w http.ResponseWriter, r *http.Request) {
-        user, err := session.FromRequest(r, store)
-        if err != nil {
+        s, err := session.FromRequest(r, store)
+        user, ok := session.Email(s)
+        if err != nil || !ok {
                 http.Redirect(w, r, "/login", http.StatusFound)
                 return
         }

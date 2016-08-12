@@ -1,4 +1,4 @@
-// create a context with a hard deadline for returning results
+// create a context with a hard deadline for returning something
 ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Second)) // HL
 
 type resultAndError struct {
@@ -14,9 +14,10 @@ go func() {
 }()
 
 // ask giphy for a gif
+sessionCtx := session.NewContext(ctx, s) // HL
 gifChan := make(chan resultAndError)
 go func() {
         terms := strings.Split(qry, " ")
-        url, err := lookup.GifForTerms(ctx, terms, giphyKey) // HL
+        url, err := lookup.GifForTerms(sessionCtx, terms, giphyKey) // HL
         gifChan <- resultAndError{[]string{url}, err}
 }()

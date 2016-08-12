@@ -1,5 +1,4 @@
 func getGiphy(ctx context.Context, path string, params map[string]interface{}) (*http.Response, error) {
-        // if the params are not nil convert them into a url query params
         var requestUrl string
 
         if params != nil {
@@ -18,4 +17,8 @@ func getGiphy(ctx context.Context, path string, params map[string]interface{}) (
 
 func parseResponse(resp *http.Response) (string, error) {
         // parses the json response from giphy to extract a displayable url
+}
+
+func ratingForUser(s *sessions.Session) string {
+        // returns the giphy rating for the user session
 }

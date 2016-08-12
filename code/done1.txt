@@ -1,15 +1,15 @@
 func someHandler() {
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background()) // HL
 	go doStuff(ctx)
 	// ...some work happens...
-	cancel()
+	cancel() // HL
 }
 
 func doStuff(ctx context.Context) {
 	// ...Doing some work
 	for {
 		select {
-		case <-ctx.Done():
+		case <-ctx.Done(): // HL
 			fmt.Println("Stop work!")
 			return
 		}

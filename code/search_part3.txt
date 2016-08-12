@@ -9,7 +9,7 @@ func() {
                         if r.err != nil || len(results) < 1 {
                                 results = []string{"Whoops we couldn't find anything!"}
                         }
-                        cancel() // HL
+                        cancel() // We got our main result cancel the context // HL
                         return
                 case r := <-gifChan:
                         if r.err != nil {

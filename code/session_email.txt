@@ -1,0 +1,8 @@
+func Email(s *sessions.Session) (string, bool) {
+        email, ok := s.Values[userSessionKey].(string)
+        if ok {
+                return email, true
+        }
+
+        return "", false
+}

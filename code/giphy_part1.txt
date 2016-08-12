@@ -1,15 +1,16 @@
-import (
-        "golang.org/x/net/context"
-        "golang.org/x/net/context/ctxhttp" // HL
-)
-
 func GifForTerms(ctx context.Context, terms []string, apiKey string) (string, error) {
         if afterDeadline(ctx) { // HL
                 return "", ctx.Err()
         }
 
+        rating := "r" // default rating
+        session, ok := session.FromContext(ctx) // HL
+        if ok {
+                rating = ratingForUser(session) // HL
+        }
+
         termsString := strings.Join(terms, "+")
-        params := map[string]interface{}{"api_key": apiKey, "q": termsString}
+        params := map[string]interface{}{"api_key": apiKey, "q": termsString, "rating": rating}
         resp, err := getGiphy(ctx, apiPath, params) // HL
         if err != nil {
                 return "", err

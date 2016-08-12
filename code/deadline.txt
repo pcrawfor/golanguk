@@ -1,12 +1,12 @@
 func someHandler() {
-        ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(5 * time.Second))
+        ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(5 * time.Second)) // HL
         go doStuff(ctx)
         // if deadline expires before work completes Done() channel is trigger
         cancel()
 }
 
 func doStuff(ctx context.Context) {
-        if deadline, ok := ctx.Deadline(); ok {
+        if deadline, ok := ctx.Deadline(); ok { // HL
                 if time.Now().After(deadline) {
                         return ctx.Err()
                 }

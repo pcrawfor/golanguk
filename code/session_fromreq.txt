@@ -1,17 +1,21 @@
-// FromRequest extracts the session from req, if present.
-func FromRequest(req *http.Request, store *sessions.CookieStore) (string, error) {
+// FromRequest extracts the user email from req, if present.
+func FromRequest(req *http.Request, store *sessions.CookieStore) (*sessions.Session, error) {
+        log.Println("FromRequest")
         if store == nil {
-                return "", errors.New("Cookie store is nil")
+                return nil, errors.New("Cookie store is nil")
         }
 
-        s, e := getSession(req, store)
-        if e != nil {
-                return "", e
-        }
-        email, ok := s.Values[userSessionKey].(string)
-        if ok {
-                return email, nil
-        }
+        return getSession(req, store)
+}
 
-        return "", errors.New("No Email found")
+// NewContext returns a new Context carrying session
+func NewContext(ctx context.Context, s *sessions.Session) context.Context {
+        return context.WithValue(ctx, sessionCtxKey, s)
+}
+
+// FromContext extracts the session from ctx, if present.
+func FromContext(ctx context.Context) (*sessions.Session, bool) {
+        // ctx.Value returns nil if ctx has no value for the key
+        s, ok := ctx.Value(sessionCtxKey).(*sessions.Session)
+        return s, ok
 }

@@ -1,4 +1,5 @@
 // dummy authentication
 func Authenticate(email, pass string) bool {
+        // this is where we'd hash the password string and compare it against our database...
         return true
 }
