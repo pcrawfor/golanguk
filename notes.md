@@ -149,3 +149,19 @@ For example data extracted from headers or cookies, userID's tied to auth inform
 
 # Example
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

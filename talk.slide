@@ -61,11 +61,14 @@ Tags: go golang context
 
 * The Solution
 
-- The Context package provides a few key mechanisms to solve the problems of managing context during a request and specifically managing goroutines
+- The *context* package provides a few key mechanisms to solve the problems of managing context during a request and specifically helping manage state between goroutines
+
+*context* provides a way to manage:
+
 - Request scoped data
 - Cancellation
-- Deadlines and timeouts
-- Safe for concurrent use
+- Deadlines and Timeouts
+- It is safe for concurrent use
 
 : -------------------------------------------------------------------------------
 
@@ -75,7 +78,11 @@ Tags: go golang context
 - The package satisfies the need for request scoped data and provides a standardized way to handle cancellation and deadlines
 - It provides a way to facilitate across API boundaries to goroutines created when handling a request
 
-.image ./example_flow_with_context_graphic
+- For reference:
+
+.link https://blog.golang.org/context https://blog.golang.org/context
+.link https://blog.golang.org/pipelines https://blog.golang.org/pipelines
+.link https://godoc.org/golang.org/x/net/context golang.org/x/net/context
 
 : -------------------------------------------------------------------------------
 
@@ -85,6 +92,9 @@ Tags: go golang context
 - Now with Go 1.7 Context is becoming part of the core library
 - Along with this are some additional changes to net, net/http and os/exec
 - All of this will make it even easier to work with and are a great reason you should all consider using it in your projects
+
+- *golang.org/x/net/context* becomes *context*
+- context additions to *net*, *net/http* and *os/exec* packages
 
 : Context has now proven itself valuable enough that it's being added to the core library and some useful helpers are being added to other core libraries to make it even easier to work with.
 
@@ -135,6 +145,9 @@ A few notes from recent context conversations online:
 
 .image ./example_context_derivation_lifecycle_image
 
+: The typical workflow for using contexts is to create a base context at the entry point
+: Then to derive new contexts when adding new values or deadline/cancellation contraints
+
 : -------------------------------------------------------------------------------
 
 * Instantiating Contexts
@@ -165,11 +178,12 @@ WithCancel():
 
 .code with_cancel.txt
 
-- Returns a copy of the parent with a new Done channel, the returned context's Done channel is closed when the returned cancel function is called or the parent Context Done channel is closed
+- Returns a copy of the parent with a new Done channel
+- The context's Done channel is closed when the cancel function is called or the parent context Done channel is closed
 
 : WithCancel returns a copy of parent with a new Done channel. The returned context's Done channel is closed when the returned cancel function is called or when the parent context's Done channel is closed, whichever happens first.
 
-: Canceling this context releases resources associated with it, so code should call cancel as soon as the operations running in this Context complete
+: Canceling the context releases resources associated with it, code should call cancel as soon as the operations running in this context complete
 
 : -------------------------------------------------------------------------------
 
@@ -179,13 +193,13 @@ WithDeadline()
 
 - Takes a time param and returns a copy of the parent context with the deadline adjusted to be no later than the time parameter
 
-: If the parent's deadline is already earlier than the time param the parent deadline holds.
-
 - The context's Done channel is closed when the deadline expires, when the returned cancel function is called or when the parent's Done channel is closed (whichever comes first)
 
-: WithDeadline returns a copy of the parent context with the deadline adjusted to be no later than d. If the parent's deadline is already earlier than d, WithDeadline(parent, d) is semantically equivalent to parent. The returned context's Done channel is closed when the deadline expires, when the returned cancel function is called, or when the parent context's Done channel is closed, whichever happens first.
+: If the parent's deadline is already earlier than the time param the parent deadline holds.
 
-: Canceling this context releases resources associated with it, so code should call cancel as soon as the operations running in this Context complete
+: WithDeadline returns a copy of the parent context with the deadline adjusted to the value passed in.
+
+: the returned context's Done channel is closed when the deadline expires, when the returned cancel function is called, or when the parent context's Done channel is closed, whichever happens first.
 
 : -------------------------------------------------------------------------------
 
@@ -214,10 +228,78 @@ WithValue()
 
 : -------------------------------------------------------------------------------
 
+* Demo app
 
-* Next
+- To demonstrate some of these concepts let's take a look at a small sample app
+- We'll build a very simple search engine with a new twist on search
+- First question what should we name our search engine?
 
-.play hello.go
+: -------------------------------------------------------------------------------
+
+* Gophgle?
+
+.image ./gophgle.png
+
+- Nah
+
+: -------------------------------------------------------------------------------
+
+* Ask Gopher?
+
+.image ./askgopher.png
+
+- Too 90's
+
+: -------------------------------------------------------------------------------
+
+* DuckDuckGopher
+
+.image ./duckduckgopher.png
+
+- That works!
+
+: -------------------------------------------------------------------------------
+
+* DuckDuckGopher
+
+- So what does our app actually do?
+- User types in a search term and gets a page with some results
+- Our cutting edge innovation is to provide a Gif to *visualize* the result
+
+.image ./demo_screen.png
+
+: I can hear the VC's getting ready to call right now
+
+: -------------------------------------------------------------------------------
+
+* So how does it work?
+
+- Seaarch request made to web app
+- Authentication cookie checked
+- Query call made to DuckDuckGo API
+- Keyword search call made to Giphy API
+- Results returned to browser
+
+.image diagram_of_search_app
+
+: -------------------------------------------------------------------------------
+
+* Components
+
+- Web server
+- Authentication
+- Lookup package (DuckDuckGo Answers API, Giphy API)
+- Session
+
+: -------------------------------------------------------------------------------
+
+* Web server
+
+- *app.go* -> HTTP server handles all web requests for the app
+
+Handlers:
+
+-
 
 : -------------------------------------------------------------------------------
 
@@ -227,3 +309,5 @@ Paul Crawford
 CTO @ Daily Burn
 paul@dailyburn.com
 @paulcrawford
+
+.image ./formal_languages.png
