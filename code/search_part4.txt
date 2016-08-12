@@ -1,0 +1,9 @@
+        params := map[string]interface{}{
+                "results":  results,
+                "question": qry,
+                "gif":      gif,
+                "user":     user,
+        }
+
+        templates.ExecuteTemplate(w, "results", params)
+}

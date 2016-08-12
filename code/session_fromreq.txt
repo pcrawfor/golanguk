@@ -1,0 +1,17 @@
+// FromRequest extracts the session from req, if present.
+func FromRequest(req *http.Request, store *sessions.CookieStore) (string, error) {
+        if store == nil {
+                return "", errors.New("Cookie store is nil")
+        }
+
+        s, e := getSession(req, store)
+        if e != nil {
+                return "", e
+        }
+        email, ok := s.Values[userSessionKey].(string)
+        if ok {
+                return email, nil
+        }
+
+        return "", errors.New("No Email found")
+}

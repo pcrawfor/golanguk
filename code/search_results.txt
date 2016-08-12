@@ -1,0 +1,14 @@
+<div class="col-md-1">
+    {{ if .gif }}
+        <img src="{{ .gif }}" style="width:90px; height: 90px;">
+    {{ else }}
+        <img src="/public/img/golang_gopher.svg" style="width:20px;">
+    {{ end }}
+</div>
+<div class="col-md-11">
+    <ul class="list-group">
+        {{ range .results }}
+            <li class="list-group-item">{{ . }}</li>
+        {{ end }}
+    </ul>
+</div>

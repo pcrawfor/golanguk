@@ -1,0 +1,4 @@
+func logout(w http.ResponseWriter, r *http.Request) {
+        session.Delete(w, r, store) // HL
+        http.Redirect(w, r, "/login", http.StatusFound)
+}

@@ -1,0 +1,12 @@
+        select {
+        case r := <-respChan:
+                return r.resp, r.err
+        case <-ctx.Done(): // if the context is cancelled return
+                return nil, ctx.Err()
+        }
+}
+
+func combineResults(resp *goduckgo.Message) []string {
+        // extract and combine data from duckduckgo api
+        // return array of result strings
+}

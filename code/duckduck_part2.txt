@@ -1,0 +1,23 @@
+func DuckduckQuery(ctx context.Context, question string) ([]string, error) {
+        type responseAndError struct {
+                resp []string
+                err  error
+        }
+
+        respChan := make(chan responseAndError)
+        go func() {
+                resp, err := goduckgo.Query(question)
+                if afterDeadline(ctx) { // HL
+                        respChan <- responseAndError{nil, ctx.Err()}
+                        return
+                }
+
+                var result []string
+                if resp != nil {
+                        result = combineResults(resp) // HL
+                }
+
+                respChan <- responseAndError{result, err} // HL
+                return
+        }()
+        // ...

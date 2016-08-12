@@ -1,0 +1,12 @@
+func authenticate(w http.ResponseWriter, r *http.Request) {
+        email := r.FormValue("email")
+        password := r.FormValue("password")
+
+        if auth.Authenticate(email, password) { // HL
+                session.Save(email, w, r, store) // HL
+                http.Redirect(w, r, "/", http.StatusFound)
+                return
+        }
+
+        http.Redirect(w, r, "/login", http.StatusFound)
+}

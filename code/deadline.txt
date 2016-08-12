@@ -1,0 +1,15 @@
+func someHandler() {
+        ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(5 * time.Second))
+        go doStuff(ctx)
+        // if deadline expires before work completes Done() channel is trigger
+        cancel()
+}
+
+func doStuff(ctx context.Context) {
+        if deadline, ok := ctx.Deadline(); ok {
+                if time.Now().After(deadline) {
+                        return ctx.Err()
+                }
+        }
+        // ... do actual work...
+}

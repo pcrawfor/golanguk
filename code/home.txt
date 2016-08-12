@@ -1,0 +1,13 @@
+func home(w http.ResponseWriter, r *http.Request) {
+        user, err := session.FromRequest(r, store) // HL
+        if err != nil {
+                http.Redirect(w, r, "/login", http.StatusFound)
+                return
+        }
+
+        params := map[string]interface{}{
+                "user": user,
+        }
+
+        templates.ExecuteTemplate(w, "search", params)
+}

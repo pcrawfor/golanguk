@@ -1,0 +1,24 @@
+var results []string
+var gif string
+
+func() {
+        for {
+                select {
+                case r := <-answerChan:
+                        results = r.results
+                        if r.err != nil || len(results) < 1 {
+                                results = []string{"Whoops we couldn't find anything!"}
+                        }
+                        cancel()
+                        return
+                case r := <-gifChan:
+                        if r.err != nil {
+                                continue
+                        }
+                        gif = r.results[0]
+                case <-ctx.Done():
+                        results = []string{"Whoops we ran out of time!"}
+                        return
+                }
+        }
+}()

@@ -1,0 +1,19 @@
+package lookup
+
+import (
+        "fmt"
+        "time"
+
+        "github.com/ajanicij/goduckgo/goduckgo"
+        "golang.org/x/net/context"
+)
+
+func afterDeadline(ctx context.Context) bool {
+        if deadline, ok := ctx.Deadline(); ok {
+                if time.Now().After(deadline) {
+                        return true
+                }
+        }
+
+        return false
+}

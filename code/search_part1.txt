@@ -1,0 +1,10 @@
+func search(w http.ResponseWriter, r *http.Request) {
+        user, err := session.FromRequest(r, store)
+        if err != nil {
+                http.Redirect(w, r, "/login", http.StatusFound)
+                return
+        }
+
+        qry := r.FormValue("input")
+
+        // ...
