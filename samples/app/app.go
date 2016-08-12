@@ -20,7 +20,7 @@ import (
 var templates *template.Template
 var store *sessions.CookieStore
 
-const GiphyKey = "dc6zaTOxFJmzC"
+const giphyKey = "dc6zaTOxFJmzC"
 
 func login(w http.ResponseWriter, r *http.Request) {
 	templates.ExecuteTemplate(w, "login", nil)
@@ -87,9 +87,8 @@ func search(w http.ResponseWriter, r *http.Request) {
 	// ask giphy for a gif
 	gifChan := make(chan resultAndError)
 	go func() {
-		g := lookup.NewGiphy(GiphyKey)
 		terms := strings.Split(qry, " ")
-		url, err := g.GifForTerms(ctx, terms)
+		url, err := lookup.GifForTerms(ctx, terms, giphyKey)
 		gifChan <- resultAndError{[]string{url}, err}
 	}()
 
@@ -111,9 +110,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 				if r.err != nil {
 					continue
 				}
-				if len(r.results) > 0 {
-					gif = r.results[0]
-				}
+				gif = r.results[0]
 			case <-ctx.Done():
 				results = []string{"Whoops we ran out of time!"}
 				return
@@ -127,8 +124,6 @@ func search(w http.ResponseWriter, r *http.Request) {
 		"gif":      gif,
 		"user":     user,
 	}
-
-	log.Println("VALUE FROM DUCK:", results)
 
 	templates.ExecuteTemplate(w, "results", params)
 }

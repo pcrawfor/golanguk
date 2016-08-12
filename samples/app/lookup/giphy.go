@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"time"
 
 	"golang.org/x/net/context"
 	"golang.org/x/net/context/ctxhttp"
@@ -16,42 +15,14 @@ import (
 
 const apiPath = "http://api.giphy.com/v1/gifs/search"
 
-type Giphy struct {
-	apiKey string
-}
-
-type GiphyResponse struct {
-	Data []data `json:"data"`
-}
-
-type data struct {
-	Images imageData `json:"images"`
-}
-
-type imageData struct {
-	FixedHeight fixedHeightData `json:"fixed_height"`
-}
-
-type fixedHeightData struct {
-	Url string `json:"url"`
-}
-
-func NewGiphy(apiKey string) *Giphy {
-	return &Giphy{apiKey: apiKey}
-}
-
-func (g *Giphy) GifForTerms(ctx context.Context, terms []string) (string, error) {
-	if deadline, ok := ctx.Deadline(); ok {
-		// if the deadline has passed return
-		fmt.Println("DEADLINE:", deadline)
-		if time.Now().After(deadline) {
-			return "", ctx.Err()
-		}
+func GifForTerms(ctx context.Context, terms []string, apiKey string) (string, error) {
+	if afterDeadline(ctx) {
+		return "", ctx.Err()
 	}
 
 	termsString := strings.Join(terms, "+")
-	params := map[string]interface{}{"api_key": g.apiKey, "q": termsString}
-	resp, err := g.get(ctx, apiPath, params)
+	params := map[string]interface{}{"api_key": apiKey, "q": termsString}
+	resp, err := getGiphy(ctx, apiPath, params)
 	if err != nil {
 		return "", err
 	}
@@ -66,7 +37,7 @@ func (g *Giphy) GifForTerms(ctx context.Context, terms []string) (string, error)
 	return url, nil
 }
 
-func (g *Giphy) get(ctx context.Context, path string, params map[string]interface{}) (*http.Response, error) {
+func getGiphy(ctx context.Context, path string, params map[string]interface{}) (*http.Response, error) {
 	// if the params are not nil convert them into a url query params
 	var requestUrl string
 
@@ -86,6 +57,22 @@ func (g *Giphy) get(ctx context.Context, path string, params map[string]interfac
 	return ctxhttp.Get(ctx, &client, requestUrl)
 }
 
+type giphyResponse struct {
+	Data []data `json:"data"`
+}
+
+type data struct {
+	Images imageData `json:"images"`
+}
+
+type imageData struct {
+	FixedHeight fixedHeightData `json:"fixed_height"`
+}
+
+type fixedHeightData struct {
+	Url string `json:"url"`
+}
+
 func parseResponse(resp *http.Response) (string, error) {
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
@@ -93,7 +80,7 @@ func parseResponse(resp *http.Response) (string, error) {
 		return "", err
 	}
 
-	gresp := GiphyResponse{}
+	gresp := giphyResponse{}
 	e := json.Unmarshal(body, &gresp)
 	if e != nil {
 		return "", e
