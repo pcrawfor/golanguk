@@ -9,6 +9,9 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/gorilla/sessions"
+	"github.com/pcrawfor/golanguk/samples/app/session"
+
 	"golang.org/x/net/context"
 	"golang.org/x/net/context/ctxhttp"
 )
@@ -20,8 +23,14 @@ func GifForTerms(ctx context.Context, terms []string, apiKey string) (string, er
 		return "", ctx.Err()
 	}
 
+	rating := "r"
+	session, ok := session.FromContext(ctx)
+	if ok {
+		rating = ratingForUser(session)
+	}
+
 	termsString := strings.Join(terms, "+")
-	params := map[string]interface{}{"api_key": apiKey, "q": termsString}
+	params := map[string]interface{}{"api_key": apiKey, "q": termsString, "rating": rating}
 	resp, err := getGiphy(ctx, apiPath, params)
 	if err != nil {
 		return "", err
@@ -93,4 +102,12 @@ func parseResponse(resp *http.Response) (string, error) {
 	}
 
 	return result, nil
+}
+
+func ratingForUser(s *sessions.Session) string {
+	email, ok := session.Email(s)
+	if ok && email == "paul@dailyburn.com" {
+		return "pg-13"
+	}
+	return "pg"
 }

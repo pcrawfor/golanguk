@@ -45,8 +45,9 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	user, err := session.FromRequest(r, store)
-	if err != nil {
+	s, err := session.FromRequest(r, store)
+	user, ok := session.Email(s)
+	if err != nil || !ok {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -61,8 +62,9 @@ func home(w http.ResponseWriter, r *http.Request) {
 func search(w http.ResponseWriter, r *http.Request) {
 	reloadTemplates()
 
-	user, err := session.FromRequest(r, store)
-	if err != nil {
+	s, err := session.FromRequest(r, store)
+	user, ok := session.Email(s)
+	if err != nil || !ok {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -85,10 +87,11 @@ func search(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	// ask giphy for a gif
+	sessionCtx := session.NewContext(ctx, s)
 	gifChan := make(chan resultAndError)
 	go func() {
 		terms := strings.Split(qry, " ")
-		url, err := lookup.GifForTerms(ctx, terms, giphyKey)
+		url, err := lookup.GifForTerms(sessionCtx, terms, giphyKey)
 		gifChan <- resultAndError{[]string{url}, err}
 	}()
 

@@ -40,37 +40,37 @@ func Delete(rw http.ResponseWriter, req *http.Request, store *sessions.CookieSto
 	return session.Save(req, rw)
 }
 
-type key int
-
-const userCtxKey key = 0
-
-// FromRequest extracts the session from req, if present.
-func FromRequest(req *http.Request, store *sessions.CookieStore) (string, error) {
-	log.Println("FromRequest")
-	if store == nil {
-		return "", errors.New("Cookie store is nil")
-	}
-
-	s, e := getSession(req, store)
-	if e != nil {
-		return "", e
-	}
+func Email(s *sessions.Session) (string, bool) {
 	email, ok := s.Values[userSessionKey].(string)
 	if ok {
-		return email, nil
+		return email, true
 	}
 
-	return "", errors.New("No Email found")
+	return "", false
 }
 
-// NewContext returns a new Context carrying user email
-func NewContext(ctx context.Context, email string) context.Context {
-	return context.WithValue(ctx, userCtxKey, email)
+type key int
+
+const sessionCtxKey key = 0
+
+// FromRequest extracts the user email from req, if present.
+func FromRequest(req *http.Request, store *sessions.CookieStore) (*sessions.Session, error) {
+	log.Println("FromRequest")
+	if store == nil {
+		return nil, errors.New("Cookie store is nil")
+	}
+
+	return getSession(req, store)
 }
 
-// FromContext extracts the user email address from ctx, if present.
-func FromContext(ctx context.Context) (string, bool) {
+// NewContext returns a new Context carrying session
+func NewContext(ctx context.Context, s *sessions.Session) context.Context {
+	return context.WithValue(ctx, sessionCtxKey, s)
+}
+
+// FromContext extracts the session from ctx, if present.
+func FromContext(ctx context.Context) (*sessions.Session, bool) {
 	// ctx.Value returns nil if ctx has no value for the key
-	email, ok := ctx.Value(userCtxKey).(string)
-	return email, ok
+	s, ok := ctx.Value(sessionCtxKey).(*sessions.Session)
+	return s, ok
 }
