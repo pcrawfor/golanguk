@@ -280,7 +280,7 @@ WithValue()
 
 * So how does it work?
 
-- Seaarch request made to web app
+- Search request made to web app
 - Authentication cookie checked
 - Query call made to DuckDuckGo API
 - Keyword search call made to Giphy API
