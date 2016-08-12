@@ -59,6 +59,8 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func search(w http.ResponseWriter, r *http.Request) {
+	reloadTemplates()
+
 	user, err := session.FromRequest(r, store)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)
@@ -71,15 +73,15 @@ func search(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Second))
 
 	type resultAndError struct {
-		result string
-		err    error
+		results []string
+		err     error
 	}
 
 	// ask duckduckgo for an answer
 	answerChan := make(chan resultAndError)
 	go func() {
-		result, err := lookup.DuckduckQuery(ctx, qry)
-		answerChan <- resultAndError{result, err}
+		value, err := lookup.DuckduckQuery(ctx, qry)
+		answerChan <- resultAndError{value, err}
 	}()
 
 	// ask giphy for a gif
@@ -88,18 +90,19 @@ func search(w http.ResponseWriter, r *http.Request) {
 		g := lookup.NewGiphy(GiphyKey)
 		terms := strings.Split(qry, " ")
 		url, err := g.GifForTerms(ctx, terms)
-		gifChan <- resultAndError{url, err}
+		gifChan <- resultAndError{[]string{url}, err}
 	}()
 
-	var result, gif string
+	var results []string
+	var gif string
 
 	func() {
 		for {
 			select {
 			case r := <-answerChan:
-				result = r.result
-				if r.err != nil || len(result) < 1 {
-					result = "Whoops we couldn't find anything!"
+				results = r.results
+				if r.err != nil || len(results) < 1 {
+					results = []string{"Whoops we couldn't find anything!"}
 				}
 				log.Println("CANCEL GIF REQUEST")
 				cancel()
@@ -108,20 +111,24 @@ func search(w http.ResponseWriter, r *http.Request) {
 				if r.err != nil {
 					continue
 				}
-				gif = r.result
+				if len(r.results) > 0 {
+					gif = r.results[0]
+				}
 			case <-ctx.Done():
-				result = "Whoops we ran out of time!"
+				results = []string{"Whoops we ran out of time!"}
 				return
 			}
 		}
 	}()
 
 	params := map[string]interface{}{
-		"result":   result,
+		"results":  results,
 		"question": qry,
 		"gif":      gif,
 		"user":     user,
 	}
+
+	log.Println("VALUE FROM DUCK:", results)
 
 	templates.ExecuteTemplate(w, "results", params)
 }

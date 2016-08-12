@@ -18,14 +18,14 @@ func afterDeadline(ctx context.Context) bool {
 	return false
 }
 
-func DuckduckQuery(ctx context.Context, question string) (string, error) {
+func DuckduckQuery(ctx context.Context, question string) ([]string, error) {
 	time.Sleep(1 * time.Second)
 	if afterDeadline(ctx) {
-		return "", ctx.Err()
+		return nil, ctx.Err()
 	}
 
 	type responseAndError struct {
-		resp string
+		resp []string
 		err  error
 	}
 
@@ -35,15 +35,15 @@ func DuckduckQuery(ctx context.Context, question string) (string, error) {
 		resp, err := goduckgo.Query(question)
 
 		if afterDeadline(ctx) {
-			respChan <- responseAndError{"", ctx.Err()}
+			respChan <- responseAndError{nil, ctx.Err()}
 			return
 		}
 
 		fmt.Println("RESP:", resp)
-		result := ""
+		var result []string
 
 		if resp != nil {
-			result = extractInfo(resp)
+			result = combineResults(resp)
 		}
 
 		respChan <- responseAndError{result, err}
@@ -54,30 +54,32 @@ func DuckduckQuery(ctx context.Context, question string) (string, error) {
 	case r := <-respChan:
 		return r.resp, r.err
 	case <-ctx.Done(): // if the context is cancelled return
-		return "", ctx.Err()
+		return nil, ctx.Err()
 	}
 }
 
-func extractInfo(resp *goduckgo.Message) string {
-	if len(resp.Answer) > 0 {
-		fmt.Println("Setting answer:", resp.Answer)
-		return resp.Answer
+func combineResults(resp *goduckgo.Message) []string {
+	results := []string{}
+	switch {
+	case len(resp.Answer) > 0:
+		results = append(results, resp.Answer)
+	case len(resp.Definition) > 0:
+		results = append(results, resp.Definition)
+	case len(resp.AbstractText) > 0:
+		results = append(results, resp.AbstractText)
+	case len(resp.Results) > 0:
+		for _, v := range resp.Results {
+			if len(v.Text) > 0 {
+				results = append(results, v.Text)
+			}
+		}
+	case len(resp.RelatedTopics) > 0:
+		for _, v := range resp.RelatedTopics {
+			if len(v.Text) > 0 {
+				results = append(results, v.Text)
+			}
+		}
 	}
-	if len(resp.Definition) > 0 {
-		fmt.Println("Setting def:", resp.Definition)
-		return resp.Definition
-	}
-	if len(resp.AbstractText) > 0 {
-		fmt.Println("Setting abstract:", resp.Abstract)
-		return resp.AbstractText
-	}
-	if len(resp.Results) > 0 {
-		fmt.Println("Setting result:", resp.Abstract)
-		return resp.Results[0].Text
-	}
-	if len(resp.RelatedTopics) > 0 {
-		fmt.Println("Setting related topic:", resp.Abstract)
-		return resp.RelatedTopics[0].Text
-	}
-	return ""
+
+	return results
 }

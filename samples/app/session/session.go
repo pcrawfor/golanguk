@@ -12,10 +12,6 @@ import (
 const userSessionKey string = "user"
 const storeKey string = "session-user"
 
-type key int
-
-const userCtxKey key = 0
-
 func getSession(req *http.Request, store *sessions.CookieStore) (*sessions.Session, error) {
 	if store != nil {
 		return store.Get(req, storeKey)
@@ -44,26 +40,26 @@ func Delete(rw http.ResponseWriter, req *http.Request, store *sessions.CookieSto
 	return session.Save(req, rw)
 }
 
+type key int
+
+const userCtxKey key = 0
+
 // FromRequest extracts the session from req, if present.
 func FromRequest(req *http.Request, store *sessions.CookieStore) (string, error) {
 	log.Println("FromRequest")
 	if store == nil {
-		log.Println("FromRequest store invalid")
 		return "", errors.New("Cookie store is nil")
 	}
 
 	s, e := getSession(req, store)
 	if e != nil {
-		log.Println("FromRequest:", e)
 		return "", e
 	}
 	email, ok := s.Values[userSessionKey].(string)
 	if ok {
-		log.Println("Email:", email)
 		return email, nil
 	}
 
-	log.Println("FromRequest NOT FOUND")
 	return "", errors.New("No Email found")
 }
 
