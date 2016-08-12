@@ -23,7 +23,6 @@ var store *sessions.CookieStore
 const GiphyKey = "dc6zaTOxFJmzC"
 
 func login(w http.ResponseWriter, r *http.Request) {
-	reloadTemplates()
 	templates.ExecuteTemplate(w, "login", nil)
 }
 
@@ -45,14 +44,12 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
-func search(w http.ResponseWriter, r *http.Request) {
+func home(w http.ResponseWriter, r *http.Request) {
 	user, err := session.FromRequest(r, store)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
-
-	reloadTemplates()
 
 	params := map[string]interface{}{
 		"user": user,
@@ -61,7 +58,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 	templates.ExecuteTemplate(w, "search", params)
 }
 
-func ask(w http.ResponseWriter, r *http.Request) {
+func search(w http.ResponseWriter, r *http.Request) {
 	user, err := session.FromRequest(r, store)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)
@@ -140,9 +137,8 @@ func main() {
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
-	http.HandleFunc("/", search)
+	http.HandleFunc("/", home)
 	http.HandleFunc("/search", search)
-	http.HandleFunc("/ask", ask)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/authenticate", authenticate)
