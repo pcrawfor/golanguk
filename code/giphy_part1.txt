@@ -4,9 +4,9 @@ func GifForTerms(ctx context.Context, terms []string, apiKey string) (string, er
         }
 
         rating := "r" // default rating
-        session, ok := session.FromContext(ctx) // HL
+        s, ok := session.FromContext(ctx) // HL
         if ok {
-                rating = ratingForUser(session) // HL
+                rating = ratingForUser(s) // HL
         }
 
         termsString := strings.Join(terms, "+")
