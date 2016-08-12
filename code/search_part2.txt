@@ -1,5 +1,5 @@
-// create a context with a hard deadline for returning something
-ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Second))
+// create a context with a hard deadline for returning results
+ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Second)) // HL
 
 type resultAndError struct {
         results []string
@@ -9,7 +9,7 @@ type resultAndError struct {
 // ask duckduckgo for an answer
 answerChan := make(chan resultAndError)
 go func() {
-        value, err := lookup.DuckduckQuery(ctx, qry)
+        value, err := lookup.DuckduckQuery(ctx, qry) // HL
         answerChan <- resultAndError{value, err}
 }()
 
@@ -17,6 +17,6 @@ go func() {
 gifChan := make(chan resultAndError)
 go func() {
         terms := strings.Split(qry, " ")
-        url, err := lookup.GifForTerms(ctx, terms, giphyKey)
+        url, err := lookup.GifForTerms(ctx, terms, giphyKey) // HL
         gifChan <- resultAndError{[]string{url}, err}
 }()

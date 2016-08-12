@@ -16,7 +16,7 @@ Tags: go golang context
 
 : Experimenting with Go as a language of choice for web development
 
-.image ./logo_horizontal.svg
+.image images/logo_horizontal.svg
 
 : -------------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ Tags: go golang context
 : I'll try to keep this at a beginner/intermediate level and not get into to any complex weeds
 
 
-.image ./funny_picture_goes_here
+.image images/funny_picture_goes_here
 
 : I once saw Joel Spolsky give a keynote at RailsConf, and one of the things he said and how he opened his talk was with a picture of some really attractive people. He said that the it was always a good idea to start a talk off with an appealing image or a funny image so that you create a good positive impression of yourself
 
@@ -47,7 +47,7 @@ Tags: go golang context
 - In Go servers each new request spawns it's own goroutines
 - So how can we solve these in a standarized way?
 
-.image ./lifecycle_of_a_request
+.image images/lifecycle_diagram.png
 
 : When a Go server receives a request it spawns a new goroutine specifically to handle the request
 : These request handling goroutines often spin up additional goroutines of their own to do things like connect to databases, talk to RPC services or do computations
@@ -88,8 +88,8 @@ Tags: go golang context
 
 * Context and Go 1.7
 
-- The context package has been around long enough to have proven its worth
-- Now with Go 1.7 Context is becoming part of the core library
+- The *context* package has been around long enough to have proven its worth
+- Now with Go 1.7 context is becoming part of the core library
 - Along with this are some additional changes to net, net/http and os/exec
 - All of this will make it even easier to work with and are a great reason you should all consider using it in your projects
 
@@ -102,7 +102,7 @@ Tags: go golang context
 
 * The Context Type
 
-- Context is made up of the Context Type along with some supporting functions
+- *context* is made up of the Context Type along with some supporting functions
 
 .code code/context.txt
 
@@ -110,7 +110,7 @@ Tags: go golang context
 
 * Done()
 
-- The Done function returns a channel that acts as a cancellation signal to functions running on behalf of Context
+- The *Done* function returns a channel that acts as a cancellation signal to functions running on behalf of a context
 - When the channel is closed the functions should end execution and exit
 
 .code code/done1.txt
@@ -149,7 +149,7 @@ A few notes from recent context conversations online:
 - These Contexts form a tree and when any Context is cancelled all those dervied from it are also cancelled
 - Provides a mechanism to manage the lifecycle of dependent functions within a request scoped operation
 
-.image ./example_context_derivation_lifecycle_image
+.image images/derived_context.png
 
 : The typical workflow for using contexts is to create a base context at the entry point
 : Then to derive new contexts when adding new values or deadline/cancellation contraints
@@ -244,7 +244,7 @@ WithValue()
 
 * Gophgle?
 
-.image ./gophgle.png
+.image images/gophgle.png
 
 - Nah
 
@@ -252,7 +252,7 @@ WithValue()
 
 * Ask Gopher?
 
-.image ./askgopher.png
+.image images/askgopher.png
 
 - Too 90's
 
@@ -260,7 +260,7 @@ WithValue()
 
 * DuckDuckGopher
 
-.image ./duckduckgopher.png
+.image images/duckduckgopher.png
 
 - That works!
 
@@ -272,7 +272,7 @@ WithValue()
 - User types in a search term and gets a page with some results
 - Our cutting edge innovation is to provide a gif to visualize the result
 
-.image ./demo_screen.png
+.image images/demo_screen.png
 
 : I can hear the VC's getting ready to call right now
 
@@ -286,7 +286,7 @@ WithValue()
 - Keyword search call made to Giphy API
 - Results returned to browser
 
-.image diagram_of_search_app
+.image images/app_diagram.png
 
 : -------------------------------------------------------------------------------
 
@@ -457,4 +457,4 @@ CTO @ Daily Burn
 paul@dailyburn.com
 @paulcrawford
 
-.image ./formal_languages.png
+.image images/formal_languages.png

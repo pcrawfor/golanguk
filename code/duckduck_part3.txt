@@ -1,8 +1,8 @@
         select {
         case r := <-respChan:
                 return r.resp, r.err
-        case <-ctx.Done(): // if the context is cancelled return
-                return nil, ctx.Err()
+        case <-ctx.Done(): // if the context is cancelled return // HL
+                return nil, ctx.Err() // HL
         }
 }
 

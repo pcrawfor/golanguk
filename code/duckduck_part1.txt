@@ -9,7 +9,7 @@ import (
 )
 
 func afterDeadline(ctx context.Context) bool {
-        if deadline, ok := ctx.Deadline(); ok {
+        if deadline, ok := ctx.Deadline(); ok { // HL
                 if time.Now().After(deadline) {
                         return true
                 }

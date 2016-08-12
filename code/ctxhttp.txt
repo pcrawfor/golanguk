@@ -6,13 +6,13 @@ func Do(ctx context.Context, client *http.Client, req *http.Request) (*http.Resp
         if client == nil {
                 client = http.DefaultClient
         }
-        resp, err := client.Do(req.WithContext(ctx))
+        resp, err := client.Do(req.WithContext(ctx)) // HL
         // If we got an error, and the context has been canceled,
         // the context's error is probably more useful.
         if err != nil {
                 select {
-                case <-ctx.Done():
-                        err = ctx.Err()
+                case <-ctx.Done(): // HL
+                        err = ctx.Err() // HL
                 default:
                 }
         }
