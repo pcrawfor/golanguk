@@ -1,21 +1,19 @@
-func Get(ctx context.Context, client *http.Client, url string) (*http.Response, error)
-
-// under the hood it calls:
-
+// under the hood it calls: (pre Go 1.7)
 func Do(ctx context.Context, client *http.Client, req *http.Request) (*http.Response, error) {
         if client == nil {
                 client = http.DefaultClient
         }
-        resp, err := client.Do(req.WithContext(ctx)) // HL
-        // If we got an error, and the context has been canceled,
-        // the context's error is probably more useful.
-        if err != nil {
-                select {
-                case <-ctx.Done(): // HL
-                        err = ctx.Err() // HL
-                default:
-                }
-        }
-        return resp, err
-}
 
+        // Request cancelation changed in Go 1.5, see cancelreq.go and cancelreq_go14.go.
+        cancel := canceler(client, req)
+
+        type responseAndError struct {
+                resp *http.Response
+                err  error
+        }
+        result := make(chan responseAndError, 1)
+
+        go func() {
+                resp, err := client.Do(req)
+                result <- responseAndError{resp, err}
+        }()

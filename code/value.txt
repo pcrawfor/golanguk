@@ -1,2 +1,4 @@
 
+var string value = "SomeValue"
 ctx = context.WithValue(context.Background(), key, value)
+val := ctx.Value(key).(string)

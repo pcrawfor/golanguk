@@ -27,14 +27,13 @@ Tags: go golang context
 - How to use it, Where to use it
 - Some best practices picked up from around the web
 
+.image images/context.jpg
+
 : When I first read the context blog post I found it a bit hard to wrap my head around the appropriate use of the package
 
 : The idea and the reasoning behind it made perfect sense but the actual in practice use cases weren't completely clear to me
 
 : I'll try to keep this at a beginner/intermediate level and not get into to any complex weeds
-
-
-.image images/funny_picture_goes_here
 
 : I once saw Joel Spolsky give a keynote at RailsConf, and one of the things he said and how he opened his talk was with a picture of some really attractive people. He said that the it was always a good idea to start a talk off with an appealing image or a funny image so that you create a good positive impression of yourself
 
@@ -151,7 +150,7 @@ See: Cancellation, Context, and Plumbing by Sameer Ajmani (_GothamGo_ _2014_)
 
 * Value()
 
-- The Value() function provides a way to store request scoped data on the context object
+- The Value() function provides a way to load request scoped data that has been stored on the context
 
 .code code/value.txt
 
@@ -310,6 +309,8 @@ WithValue()
 - Results returned to browser
 
 .image images/app_diagram.png
+
+: We're going to use context to help manage how we gather the results and return the values
 
 : -------------------------------------------------------------------------------
 
@@ -476,6 +477,14 @@ Handlers:
 - *ctxhttp:* we're using *ctxhttp.Get* to make our http call to giphy
 
 .code code/ctxhttp.txt
+
+: -------------------------------------------------------------------------------
+
+* Lookup - ctxhttp (cont'd)
+
+.code code/ctxhttp_part2.txt
+
+.code code/ctxhttp_go17.txt
 
 : -------------------------------------------------------------------------------
 

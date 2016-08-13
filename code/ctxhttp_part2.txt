@@ -1,0 +1,9 @@
+        select {
+        case <-ctx.Done():
+                cancel()
+                return nil, ctx.Err()
+        case r := <-result:
+                return r.resp, r.err
+        }
+}
+

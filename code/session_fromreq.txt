@@ -10,12 +10,12 @@ func FromRequest(req *http.Request, store *sessions.CookieStore) (*sessions.Sess
 
 // NewContext returns a new Context carrying session
 func NewContext(ctx context.Context, s *sessions.Session) context.Context {
-        return context.WithValue(ctx, sessionCtxKey, s)
+        return context.WithValue(ctx, sessionCtxKey, s) // HL
 }
 
 // FromContext extracts the session from ctx, if present.
 func FromContext(ctx context.Context) (*sessions.Session, bool) {
         // ctx.Value returns nil if ctx has no value for the key
-        s, ok := ctx.Value(sessionCtxKey).(*sessions.Session)
+        s, ok := ctx.Value(sessionCtxKey).(*sessions.Session) // HL
         return s, ok
 }
