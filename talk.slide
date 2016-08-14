@@ -268,8 +268,6 @@ WithValue()
 
 .image images/duckduckgopher.png
 
-- That works!
-
 : -------------------------------------------------------------------------------
 
 * DuckDuckGopher
@@ -338,14 +336,6 @@ Handlers:
 
 : To demonstrate very simple cookie authentcation we use the gorilla/sessions library
 : Our login/logout/authenticate actions allow a user to sign in with a valid session and to logout of that session
-
-: -------------------------------------------------------------------------------
-
-* Web Server - authentication (cont'd)
-
-- The actual verification of email/password is just dummied out since that's not the focus of this sample app
-
-.code code/auth_package.txt
 
 : -------------------------------------------------------------------------------
 

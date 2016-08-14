@@ -2,16 +2,16 @@ func someHandler() {
 	ctx, cancel := context.WithCancel(context.Background()) // HL
 	go doStuff(ctx)
 	// ...some work happens...
-	cancel() // HL
+	if someCondition {
+		cancel() // HL
+	}
 }
 
 func doStuff(ctx context.Context) {
 	// ...Doing some work
-	for {
-		select {
-		case <-ctx.Done(): // HL
-			fmt.Println("Stop work!")
-			return
-		}
+	select {
+	case <-ctx.Done(): // HL
+		fmt.Println("Stop work!")
+		return
 	}
 }

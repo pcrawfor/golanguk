@@ -1,6 +1,6 @@
 func home(w http.ResponseWriter, r *http.Request) {
         s, err := session.FromRequest(r, store) // HL
-        user, ok := session.Email(s)
+        user, ok := session.Email(s) // HL
         if err != nil || !ok {
                 http.Redirect(w, r, "/login", http.StatusFound)
                 return

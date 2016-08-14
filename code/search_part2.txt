@@ -1,5 +1,5 @@
 // create a context with a hard deadline for returning something
-ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Second)) // HL
+ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second) // HL
 
 type resultAndError struct {
         results []string
