@@ -72,7 +72,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 	qry := r.FormValue("input")
 
 	// create a context with a hard deadline for returning something
-	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Second))
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 
 	type resultAndError struct {
 		results []string
