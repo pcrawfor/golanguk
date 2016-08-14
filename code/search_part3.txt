@@ -17,7 +17,9 @@ func() {
                         }
                         gif = r.results[0]
                 case <-ctx.Done(): // HL
-                        results = []string{"Whoops we ran out of time!"}
+                        if results == nil {
+                                results = []string{"Whoops we ran out of time!"}
+                        }
                         return
                 }
         }

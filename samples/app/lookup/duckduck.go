@@ -19,7 +19,7 @@ func afterDeadline(ctx context.Context) bool {
 }
 
 func DuckduckQuery(ctx context.Context, question string) ([]string, error) {
-	time.Sleep(1 * time.Second)
+	time.Sleep(300 * time.Millisecond)
 	if afterDeadline(ctx) {
 		return nil, ctx.Err()
 	}
