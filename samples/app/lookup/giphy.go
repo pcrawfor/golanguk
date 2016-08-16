@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/gorilla/sessions"
 	"github.com/pcrawfor/golanguk/samples/app/session"
@@ -17,6 +18,16 @@ import (
 )
 
 const apiPath = "http://api.giphy.com/v1/gifs/search"
+
+func afterDeadline(ctx context.Context) bool {
+	if deadline, ok := ctx.Deadline(); ok {
+		if time.Now().After(deadline) {
+			return true
+		}
+	}
+
+	return false
+}
 
 func GifForTerms(ctx context.Context, terms []string, apiKey string) (string, error) {
 	if afterDeadline(ctx) {

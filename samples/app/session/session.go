@@ -12,16 +12,9 @@ import (
 const userSessionKey string = "user"
 const storeKey string = "session-user"
 
-func getSession(req *http.Request, store *sessions.CookieStore) (*sessions.Session, error) {
-	if store != nil {
-		return store.Get(req, storeKey)
-	}
-	return nil, nil
-}
-
 func Save(email string, rw http.ResponseWriter, req *http.Request, store *sessions.CookieStore) error {
 	log.Println("SAVE session")
-	session, err := getSession(req, store)
+	session, err := FromRequest(req, store)
 	if err != nil {
 		log.Println("SAVE session:", err)
 		return err
@@ -32,7 +25,7 @@ func Save(email string, rw http.ResponseWriter, req *http.Request, store *sessio
 }
 
 func Delete(rw http.ResponseWriter, req *http.Request, store *sessions.CookieStore) error {
-	session, err := getSession(req, store)
+	session, err := FromRequest(req, store)
 	if err != nil {
 		return err
 	}
@@ -60,7 +53,7 @@ func FromRequest(req *http.Request, store *sessions.CookieStore) (*sessions.Sess
 		return nil, errors.New("Cookie store is nil")
 	}
 
-	return getSession(req, store)
+	return store.Get(req, storeKey)
 }
 
 // NewContext returns a new Context carrying session

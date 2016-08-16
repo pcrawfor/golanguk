@@ -8,21 +8,8 @@ import (
 	"golang.org/x/net/context"
 )
 
-func afterDeadline(ctx context.Context) bool {
-	if deadline, ok := ctx.Deadline(); ok {
-		if time.Now().After(deadline) {
-			return true
-		}
-	}
-
-	return false
-}
-
 func DuckduckQuery(ctx context.Context, question string) ([]string, error) {
 	time.Sleep(300 * time.Millisecond)
-	if afterDeadline(ctx) {
-		return nil, ctx.Err()
-	}
 
 	type responseAndError struct {
 		resp []string
@@ -33,11 +20,6 @@ func DuckduckQuery(ctx context.Context, question string) ([]string, error) {
 
 	go func() {
 		resp, err := goduckgo.Query(question)
-
-		if afterDeadline(ctx) {
-			respChan <- responseAndError{nil, ctx.Err()}
-			return
-		}
 
 		fmt.Println("RESP:", resp)
 		var result []string
