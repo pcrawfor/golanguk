@@ -2,21 +2,20 @@ const userSessionKey string = "user"
 const storeKey string = "session-user"
 
 func Save(email string, rw http.ResponseWriter, req *http.Request, store *sessions.CookieStore) error {
-        session, err := getSession(req, store)
+        session, err := getSession(req, store) // HL
         if err != nil {
-                log.Println("SAVE session:", err)
                 return err
         }
 
         session.Values[userSessionKey] = email
-        return session.Save(req, rw)
+        return session.Save(req, rw) // HL
 }
 
 func Delete(rw http.ResponseWriter, req *http.Request, store *sessions.CookieStore) error {
-        session, err := getSession(req, store)
+        session, err := getSession(req, store) // HL
         if err != nil {
                 return err
         }
-        delete(session.Values, userSessionKey)
+        delete(session.Values, userSessionKey) // HL
         return session.Save(req, rw)
 }

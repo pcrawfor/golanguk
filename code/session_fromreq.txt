@@ -1,5 +1,5 @@
 func Email(s *sessions.Session) (string, bool) {
-        email, ok := s.Values[userSessionKey].(string)
+        email, ok := s.Values[userSessionKey].(string) // HL
         if ok {
                 return email, true
         }
@@ -8,11 +8,10 @@ func Email(s *sessions.Session) (string, bool) {
 }
 
 // FromRequest extracts the user email from req, if present.
-func FromRequest(req *http.Request, store *sessions.CookieStore) (*sessions.Session, error) {
-        log.Println("FromRequest")
+func FromRequest(req *http.Request, store *sessions.CookieStore) (*sessions.Session, error) {=
         if store == nil {
                 return nil, errors.New("Cookie store is nil")
         }
 
-        return getSession(req, store)
+        return store.Get(req, storeKey) // HL
 }

@@ -1,0 +1,17 @@
+func afterDeadline(ctx context.Context) bool {
+        if deadline, ok := ctx.Deadline(); ok { // HL
+                if time.Now().After(deadline) {
+                        return true
+                }
+        }
+
+        return false
+}
+
+func parseResponse(resp *http.Response) (string, error) {
+        // parses the json response from giphy to extract a displayable url
+}
+
+func ratingForUser(s *sessions.Session) string {
+        // returns the giphy rating for the user session
+}

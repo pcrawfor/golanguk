@@ -14,11 +14,3 @@ func getGiphy(ctx context.Context, path string, params map[string]interface{}) (
         client := http.Client{}
         return ctxhttp.Get(ctx, &client, requestUrl) // HL
 }
-
-func parseResponse(resp *http.Response) (string, error) {
-        // parses the json response from giphy to extract a displayable url
-}
-
-func ratingForUser(s *sessions.Session) string {
-        // returns the giphy rating for the user session
-}

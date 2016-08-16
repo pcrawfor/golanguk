@@ -5,7 +5,6 @@ Tags: go golang context
 * Hi I'm Paul
 
 - CTO @ Daily Burn
-- Rails Developer -> iOS Developer -> Go Developer
 - Started using Go about 5 years ago
 - Wrote the first pieces of Go code at Daily Burn for backend infrastructure
 - We now use Go for queueing, real time messaging, ETL, devops
@@ -33,9 +32,7 @@ Tags: go golang context
 
 : The idea and the reasoning behind it made perfect sense but the actual in practice use cases weren't completely clear to me
 
-: I'll try to keep this at a beginner/intermediate level and not get into to any complex weeds
-
-: I once saw Joel Spolsky give a keynote at RailsConf, and one of the things he said and how he opened his talk was with a picture of some really attractive people. He said that the it was always a good idea to start a talk off with an appealing image or a funny image so that you create a good positive impression of yourself
+: I'll try to keep this at a beginner/intermediate level and not get into to many complex weeds
 
 : -------------------------------------------------------------------------------
 
@@ -260,7 +257,6 @@ WithValue()
 
 - To demonstrate some of these concepts let's take a look at a small sample app
 - We'll build a very simple search engine with a new twist on search
-- First question what should we name our search engine?
 
 : -------------------------------------------------------------------------------
 
@@ -300,7 +296,6 @@ WithValue()
 
 - *Web* *Server*
 - *session* package
-- *auth* package
 - lookup package (DuckDuckGo Answers API, Giphy API)
 
 : Explain in a little depth what each component will do
@@ -411,18 +406,12 @@ Handlers:
 * Components
 
 - Web Server
-- Session
-- *Lookup* *package* (DuckDuckGo Answers API, Giphy API)
+- session package
+- *lookup* package (DuckDuckGo Answers API, Giphy API)
 
 : -------------------------------------------------------------------------------
 
 * Lookup - Duckduckgo
-
-.code code/duckduck_part1.txt
-
-: -------------------------------------------------------------------------------
-
-* Lookup - Duckduckgo (cont'd)
 
 .code code/duckduck_part2.txt
 
@@ -443,6 +432,12 @@ Handlers:
 * Lookup - Giphy (cont'd)
 
 .code code/giphy_part2.txt
+
+: -------------------------------------------------------------------------------
+
+* Lookup - Giphy (cont'd)
+
+.code code/giphy_part3.txt
 
 : -------------------------------------------------------------------------------
 
