@@ -6,7 +6,6 @@ Tags: go golang context
 
 - CTO @ Daily Burn
 - Started using Go about 5 years ago
-- Wrote the first pieces of Go code at Daily Burn for backend infrastructure
 - We now use Go for queueing, real time messaging, ETL, devops
 
 : I've been using Go for the past 5 years, attended the first 2 gophercon's and lots of go talks at GoogleIO over the years
@@ -22,7 +21,6 @@ Tags: go golang context
 * Let's Talk
 
 - Goal of this talk is to introduce you to the context package
-- What is it good for
 - How to use it, Where to use it
 - Some best practices picked up from around the web
 
@@ -40,7 +38,7 @@ Tags: go golang context
 
 - In Go servers each new request spawns it's own goroutine
 - Goroutines don't have any 'thread local' state
-- Your code is responsible for managing the lifecycle of any goroutine it creates
+- Your code is responsible for things like cancellation, time outs, request data
 - So how can we solve these in a standarized way?
 
 .image images/lifecycle_diagram.png
@@ -431,13 +429,13 @@ Handlers:
 
 * Lookup - Giphy (cont'd)
 
-.code code/giphy_part2.txt
+.code code/giphy_part3.txt
 
 : -------------------------------------------------------------------------------
 
 * Lookup - Giphy (cont'd)
 
-.code code/giphy_part3.txt
+.code code/giphy_part2.txt
 
 : -------------------------------------------------------------------------------
 
@@ -453,7 +451,12 @@ Handlers:
 
 .code code/ctxhttp_part2.txt
 
+: -------------------------------------------------------------------------------
+
+* Lookup - ctxhttp (cont'd)
+
 .code code/ctxhttp_go17.txt
+
 
 : -------------------------------------------------------------------------------
 

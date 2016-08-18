@@ -2,7 +2,7 @@ const userSessionKey string = "user"
 const storeKey string = "session-user"
 
 func Save(email string, rw http.ResponseWriter, req *http.Request, store *sessions.CookieStore) error {
-        session, err := getSession(req, store) // HL
+        session, err := FromRequest(req, store) // HL
         if err != nil {
                 return err
         }
@@ -12,7 +12,7 @@ func Save(email string, rw http.ResponseWriter, req *http.Request, store *sessio
 }
 
 func Delete(rw http.ResponseWriter, req *http.Request, store *sessions.CookieStore) error {
-        session, err := getSession(req, store) // HL
+        session, err := FromRequest(req, store) // HL
         if err != nil {
                 return err
         }
