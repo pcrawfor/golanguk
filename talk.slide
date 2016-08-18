@@ -38,8 +38,7 @@ Tags: go golang context
 
 - In Go servers each new request spawns it's own goroutine
 - Goroutines don't have any 'thread local' state
-- Your code is responsible for things like cancellation, time outs, request data
-- So how can we solve these in a standarized way?
+- Your code is responsible for things like cancellation, time outs, storing data
 
 .image images/lifecycle_diagram.png
 
@@ -59,13 +58,12 @@ Tags: go golang context
 
 * The Solution
 
-- The *context* package provides a few key mechanisms to solve the problems of managing context during a request and specifically helping manage state between goroutines
+- The *context* package provides a standard way to solve the problems of managing state during a request
 
-*context* provides a way to manage:
+*context* addresses:
 
 - Request scoped data
-- Cancellation
-- Deadlines and Timeouts
+- Cancellation, Deadlines & Timeouts
 - It is safe for concurrent use
 
 See: Cancellation, Context, and Plumbing by Sameer Ajmani (_GothamGo_ _2014_)
@@ -74,9 +72,9 @@ See: Cancellation, Context, and Plumbing by Sameer Ajmani (_GothamGo_ _2014_)
 
 : -------------------------------------------------------------------------------
 
-* Some Context for Context
+* Some Context for context
 
-- The Context Package originated out of Google and was announced officially in July 2014
+- The *context* package originated out of Google and was announced officially in July 2014
 - The package satisfies the need for request scoped data and provides a standardized way to handle cancellation and deadlines
 - It provides a way to facilitate across API boundaries to goroutines created when handling a request
 
@@ -94,8 +92,8 @@ See: Cancellation, Context, and Plumbing by Sameer Ajmani (_GothamGo_ _2014_)
 
 * Context and Go 1.7
 
+- With the release of Go 1.7 context is now part of the core library
 - The *context* package has been around long enough to have proven its worth
-- Now with Go 1.7 context is becoming part of the core library
 - Along with this are some additional changes to net, net/http and os/exec
 - All of this will make it even easier to work with and are a great reason you should all consider using it in your projects
 
