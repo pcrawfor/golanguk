@@ -23,14 +23,14 @@
             </div>
             <hr />
             <div class="row">
-                <div class="col-md-1">
+                <div class="col-md-2">
                     {{ if .gif }}
-                        <img src="{{ .gif }}" style="width:90px; height: 90px;">
+                        <img src="{{ .gif }}" style="width:170px; height: 150px;">
                     {{ else }}
                         <img src="/public/img/golang_gopher.svg" style="width:80px;">
                     {{ end }}
                 </div>
-                <div class="col-md-11">
+                <div class="col-md-10">
                     <ul class="list-group">
                         {{ range .results }}
                             <li class="list-group-item">{{ . }}</li>
