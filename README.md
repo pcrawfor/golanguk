@@ -14,6 +14,8 @@ In order to view the slides you can use the golang present tool:
 
 You can then view it at: http://localhost:3999/talk.slide#1
 
+Also included in the repo is a pdf copy of the slides.
+
 ## Sample App:
 
 The sample application is implemented under the folder samples/app. It can be run locally by using:
