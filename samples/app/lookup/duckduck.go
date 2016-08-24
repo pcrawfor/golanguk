@@ -2,15 +2,13 @@ package lookup
 
 import (
 	"fmt"
-	"time"
+
+	"context"
 
 	"github.com/ajanicij/goduckgo/goduckgo"
-	"golang.org/x/net/context"
 )
 
 func DuckduckQuery(ctx context.Context, question string) ([]string, error) {
-	time.Sleep(300 * time.Millisecond)
-
 	type responseAndError struct {
 		resp []string
 		err  error

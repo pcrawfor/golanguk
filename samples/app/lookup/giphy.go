@@ -13,7 +13,8 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/pcrawfor/golanguk/samples/app/session"
 
-	"golang.org/x/net/context"
+	"context"
+
 	"golang.org/x/net/context/ctxhttp"
 )
 
