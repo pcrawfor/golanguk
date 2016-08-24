@@ -38,7 +38,7 @@ Tags: go golang context
 
 - In Go servers each new request spawns it's own goroutine
 - Goroutines don't have any 'thread local' state
-- Your code is responsible for things like cancellation, time outs, storing data
+- Your code is responsible for things like things like cancellation, time outs and data
 
 .image images/lifecycle_diagram.png
 
@@ -94,11 +94,10 @@ See: Cancellation, Context, and Plumbing by Sameer Ajmani (_GothamGo_ _2014_)
 
 - With the release of Go 1.7 context is now part of the core library
 - The *context* package has been around long enough to have proven its worth
-- Along with this are some additional changes to net, net/http and os/exec
+- Along with this are some additional changes to *net*, *net/http* and *os/exec*
 - All of this will make it even easier to work with and are a great reason you should all consider using it in your projects
 
 - *golang.org/x/net/context* becomes *context*
-- context additions to *net*, *net/http* and *os/exec* packages
 
 : Context has now proven itself valuable enough that it's being added to the core library and some useful helpers are being added to other core libraries to make it even easier to work with.
 
@@ -266,6 +265,7 @@ WithValue()
 
 - So what does our app actually do?
 - User types in a search term and gets a page with some results
+- User account required for our very exclusive search engine
 - Our cutting edge innovation is to provide a gif to visualize the result
 
 .image images/demo_screen.png
