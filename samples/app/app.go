@@ -20,6 +20,7 @@ import (
 var templates *template.Template
 var store *sessions.CookieStore
 
+// this is a public API key available from the giphy github page
 const giphyKey = "dc6zaTOxFJmzC"
 
 func login(w http.ResponseWriter, r *http.Request) {
